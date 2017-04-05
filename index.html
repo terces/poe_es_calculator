@@ -20,7 +20,10 @@
 		</select>
 	</div>
 	<div id="base">
-		Base ES: <input name="bes" type="number" /><br />
+		Base ES: <input name="bes" type="number" value="100"/>
+		<select name="default_eq" >
+			<option selected>Hubris Circlet</option>
+		</select><br />
 		Quality: <input name="superior" type="number" min="0" max="20" value="20" />
 	</div>
 </div>
@@ -126,8 +129,84 @@
 		return false;
 	}
 
+	function append_default_eq() {
+		var eq = document.querySelector( '.eq select[name="btype"]').value;
+		var dft = document.querySelector( '.eq select[name="default_eq"]');
+		dft.innerHTML = "";
+
+		switch( eq) {
+			case "helmet":
+				dft.innerHTML += "<option selected>Hubris Circlet</option>"; // 100
+				break;
+			case "body":
+				dft.innerHTML += "<option selected>Vaal Regalia</option>"; // 175
+				break;
+			case "gloves":
+				dft.innerHTML += "<option selected>Sorcerer Gloves</option>"; // 61
+				dft.innerHTML += "<option>Fingerless Silk Gloves</option>";   // 56
+				break;
+			case "boots":
+				dft.innerHTML += "<option selected>Sorcerer Boots</option>"; // 64
+				break;
+			case "shield":
+				dft.innerHTML += "<option selected>Titanium Spirit Shield</option>"; // 84
+				dft.innerHTML += "<option>Harmonic Spirit Shield</option>"; // 72
+				dft.innerHTML += "<option>Vaal Spirit Shield</option>"; // 70
+				dft.innerHTML += "<option>Fossilised Spirit Shield</option>"; // 61
+				break;
+			default:
+				break;
+		}
+		dft.style.visibility = "visible";
+		dft.onchange();
+		return ;
+	}
+
+	function set_default_eq_base() {
+		var dft = document.querySelector( '.eq select[name="default_eq"]');
+		var bes = document.querySelector( '.eq input[name="bes"]');
+		switch( dft.value) {
+			case "Hubris Circlet":
+				bes.value = 100;
+				break;
+			case "Vaal Regalia":
+				bes.value = 175;
+				break;
+			case "Sorcerer Gloves":
+				bes.value = 61;
+				break;
+			case "Fingerless Silk Gloves":
+				bes.value = 56;
+				break;
+			case "Sorcerer Boots":
+				bes.value = 64;
+				break;
+			case "Titanium Spirit Shield":
+				bes.value = 84;
+				break;
+			case "Harmonic Spirit Shield":
+				bes.value = 72;
+				break;
+			case "Vaal Spirit Shield":
+				bes.value = 70;
+				break;
+			case "Fossilised Spirit Shield":
+				bes.value = 61;
+				break;
+			default:
+				break;
+		}
+		return ;
+	}
+
 	var btn = document.querySelector( "#calc");
 	btn.onclick = run;
+
+	var type_selector = document.querySelector( '.eq select[name="btype"]');
+	type_selector.onchange = append_default_eq;
+
+	var dft_selector = document.querySelector( '.eq select[name="default_eq"]');
+	dft_selector.onchange = set_default_eq_base;
 </script>
 </body>
 </html>
