@@ -134,6 +134,11 @@
 		var eq = document.querySelector( '.eq select[name="btype"]').value;
 		var dft = document.querySelector( '.eq select[name="default_eq"]');
 		var custom = document.querySelector( '.eq input[name="bes"]');
+
+		var flat = document.querySelector( '.mod input[name="flat-tier"]');
+		var es = document.querySelector( '.mod input[name="es-tier"]');
+		var es_stun = document.querySelector( '.mod input[name="es-stun-tier"]');
+
 		custom.disabled = true;
 		dft.innerHTML = "";
 
@@ -141,19 +146,31 @@
 			case "helmet":
 				dft.innerHTML += "<option selected>Hubris Circlet</option>"; // 100
 				dft.innerHTML += "<option>Custom</option>";
+				flat.max = helmet_flat.length - 1;
+				es.max = helmet_es.length - 1;
+				es_stun.max = helmet_es_stun.length - 1;
 				break;
 			case "body":
 				dft.innerHTML += "<option selected>Vaal Regalia</option>"; // 175
 				dft.innerHTML += "<option>Custom</option>";
+				flat.max = body_flat.length - 1;
+				es.max = body_es.length - 1;
+				es_stun.max = body_es_stun.length - 1;
 				break;
 			case "gloves":
 				dft.innerHTML += "<option selected>Sorcerer Gloves</option>"; // 61
 				dft.innerHTML += "<option>Fingerless Silk Gloves</option>";   // 56
 				dft.innerHTML += "<option>Custom</option>";
+				flat.max = gloves_flat.length - 1;
+				es.max = gloves_es.length - 1;
+				es_stun.max = gloves_es_stun.length - 1;
 				break;
 			case "boots":
 				dft.innerHTML += "<option selected>Sorcerer Boots</option>"; // 64
 				dft.innerHTML += "<option>Custom</option>";
+				flat.max = boots_flat.length - 1;
+				es.max = boots_es.length - 1;
+				es_stun.max = boots_es_stun.length - 1;
 				break;
 			case "shield":
 				dft.innerHTML += "<option selected>Titanium Spirit Shield</option>"; // 84
@@ -161,6 +178,9 @@
 				dft.innerHTML += "<option>Vaal Spirit Shield</option>"; // 70
 				dft.innerHTML += "<option>Fossilised Spirit Shield</option>"; // 61
 				dft.innerHTML += "<option>Custom</option>";
+				flat.max = shield_flat.length - 1;
+				es.max = shield_es.length - 1;
+				es_stun.max = shield_es_stun.length - 1;
 				break;
 			default:
 				break;
@@ -214,6 +234,7 @@
 
 	var type_selector = document.querySelector( '.eq select[name="btype"]');
 	type_selector.onchange = append_default_eq;
+	type_selector.onchange();
 
 	var dft_selector = document.querySelector( '.eq select[name="default_eq"]');
 	dft_selector.onchange = set_default_eq_base;
