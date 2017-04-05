@@ -20,9 +20,10 @@
 		</select>
 	</div>
 	<div id="base">
-		Base ES: <input name="bes" type="number" value="100"/>
+		Base ES: <input name="bes" type="number" value="100" disabled/>
 		<select name="default_eq" >
 			<option selected>Hubris Circlet</option>
+			<option>Custom</option>
 		</select><br />
 		Quality: <input name="superior" type="number" min="0" max="20" value="20" />
 	</div>
@@ -132,27 +133,34 @@
 	function append_default_eq() {
 		var eq = document.querySelector( '.eq select[name="btype"]').value;
 		var dft = document.querySelector( '.eq select[name="default_eq"]');
+		var custom = document.querySelector( '.eq input[name="bes"]');
+		custom.disabled = true;
 		dft.innerHTML = "";
 
 		switch( eq) {
 			case "helmet":
 				dft.innerHTML += "<option selected>Hubris Circlet</option>"; // 100
+				dft.innerHTML += "<option>Custom</option>";
 				break;
 			case "body":
 				dft.innerHTML += "<option selected>Vaal Regalia</option>"; // 175
+				dft.innerHTML += "<option>Custom</option>";
 				break;
 			case "gloves":
 				dft.innerHTML += "<option selected>Sorcerer Gloves</option>"; // 61
 				dft.innerHTML += "<option>Fingerless Silk Gloves</option>";   // 56
+				dft.innerHTML += "<option>Custom</option>";
 				break;
 			case "boots":
 				dft.innerHTML += "<option selected>Sorcerer Boots</option>"; // 64
+				dft.innerHTML += "<option>Custom</option>";
 				break;
 			case "shield":
 				dft.innerHTML += "<option selected>Titanium Spirit Shield</option>"; // 84
 				dft.innerHTML += "<option>Harmonic Spirit Shield</option>"; // 72
 				dft.innerHTML += "<option>Vaal Spirit Shield</option>"; // 70
 				dft.innerHTML += "<option>Fossilised Spirit Shield</option>"; // 61
+				dft.innerHTML += "<option>Custom</option>";
 				break;
 			default:
 				break;
@@ -193,6 +201,8 @@
 			case "Fossilised Spirit Shield":
 				bes.value = 61;
 				break;
+			case "Custom":
+				bes.disabled = false;
 			default:
 				break;
 		}
