@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+</style>
+</head>
+<body>
+
+<h1>Path of Exile Equipment Energy Shield calculator</h1>
+
+<div class="eq">
+	<div id="type">
+		<select name="btype">
+			<option value="helmet">Helmet</option>
+			<option value="body">Body Chest</option>
+			<option value="gloves">Gloves</option>
+			<option value="boots">Boots</option>
+			<option value="shield">Shield</option>
+		</select>
+	</div>
+	<div id="base">
+		Base ES: <input name="bes" type="number" /><br />
+		Quality: <input name="superior" type="number" min="0" max="20" value="20" />
+	</div>
+</div>
+<div class="mod">
+	<div id="flat">
+		Tier: <input name="flat-tier" type="number" /><br />
+	</div>
+	<div id="es">
+		Tier: <input name="es-tier" type="number" /><br /> 
+	</div>
+	<div id="es-stun">
+		Tier: <input name="es-stun-tier" type="number" /><br /> 
+	</div>
+</div>
+<div class="result">
+	<button id="calc">Calculate!</button><br />
+	ES Range: <label id="es-result"></label>
+</div>
+
+<script>
+	// ES range
+	// global hi, lo
+	var hi, lo;
+	// helmet
+	var helmet_flat = [ 73, 49, 30, 20, 16, 13, 9, 6, 3];
+	var helmet_es = [ 133, 121, 101, 83, 65, 47, 29, 11];
+	var helmet_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
+	// body
+	var body_flat = [ 146, 136, 107, 73, 49, 30, 20, 16, 13, 9, 6, 3];
+	var body_es = [ 133, 121, 101, 83, 65, 47, 29, 11];
+	var body_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
+	// gloves
+	var gloves_flat = [ 49, 30, 20, 16, 13, 9, 6, 3];
+	var gloves_es = [ 133, 121, 101, 83, 65, 47, 29, 11];
+	var gloves_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
+	// boots
+	var boots_flat = [ 49, 30, 20, 16, 13, 9, 6, 3];
+	var boots_es = [ 133, 121, 101, 83, 65, 47, 29, 11];
+	var boots_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
+	// shields
+	var shield_flat = [ 136, 107, 73, 49, 30, 20, 16, 13, 9, 6, 3];
+	var shield_es = [ 133, 121, 101, 83, 65, 47, 29, 11];
+	var shield_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
+	// special: haku
+	var haku_flat = [ 23, 18, 14];
+	var haku_es = [ 69, 55, 53, 44];
+
+	function run() {
+		var eq = document.querySelector( '.eq select[name="btype"]').value;
+		var bes = Number( document.querySelector( '.eq input[name="bes"]').value);
+		var superior = Number( document.querySelector( '.eq input[name="superior"]').value);
+		var flat_tier = Number( document.querySelector( '.mod input[name="flat-tier"]').value);
+		var es_tier = Number( document.querySelector( '.mod input[name="es-tier"]').value);
+		var es_stun_tier = Number( document.querySelector( '.mod input[name="es-stun-tier"]').value);
+		var noeq = 0;
+		var flat, es, es_stun;
+		switch( eq) {
+			case "helmet":
+				flat = helmet_flat;
+				es = helmet_es;
+				es_stun = helmet_es_stun;
+				break;
+			case "body":
+				flat = body_flat;
+				es = body_es;
+				es_stun = body_es_stun;
+				break;
+			case "gloves":
+				flat = gloves_flat;
+				es = gloves_es;
+				es_stun = gloves_es_stun;
+				break;
+			case "boots":
+				flat = boots_flat;
+				es = boots_es;
+				es_stun = boots_es_stun;
+				break;
+			case "shield":
+				flat = shield_flat;
+				es = shield_es;
+				es_stun = shield_es_stun;
+				break;
+			default:
+				alert( "equipment type cannout find.");
+				noeq = 1;
+				break;
+		}
+
+		if( noeq == 0) {
+			hi = ( 1 + ( superior + es[ es_tier - 1] - 1 + es_stun[ es_stun_tier - 1] - 1 )/100 ) * (bes + flat[ flat_tier - 1] - 1);
+			lo = ( 1 + ( superior + es[ es_tier] + es_stun[ es_stun_tier] )/100 ) * (bes + flat[ flat_tier]);
+			document.querySelector( "#es-result").innerHTML = Math.round(hi) + " ~ " + Math.round(lo);
+		}
+
+		return false;
+	}
+
+	var btn = document.querySelector( "#calc");
+	btn.onclick = run;
+</script>
+</body>
+</html>
