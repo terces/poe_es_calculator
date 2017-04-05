@@ -29,10 +29,10 @@
 		Flat ES Tier: <input name="flat-tier" type="number" /><br />
 	</div>
 	<div id="es">
-		ES% Tier: <input name="es-tier" type="number" /><br /> 
+		ES% Tier: <input name="es-tier" type="number" /><br />
 	</div>
 	<div id="es-stun">
-		ES%/Stun% Tier: <input name="es-stun-tier" type="number" /><br /> 
+		ES%/Stun% Tier: <input name="es-stun-tier" type="number" /><br />
 	</div>
 </div>
 <div class="result">
@@ -110,8 +110,16 @@
 		}
 
 		if( noeq == 0) {
-			hi = ( 1 + ( superior + es[ es_tier - 1] - 1 + es_stun[ es_stun_tier - 1] - 1 )/100 ) * (bes + flat[ flat_tier - 1] - 1);
-			lo = ( 1 + ( superior + es[ es_tier] + es_stun[ es_stun_tier] )/100 ) * (bes + flat[ flat_tier]);
+			var t_flat, t_es, t_es_stun;
+			t_es = es_tier ? es[ es_tier - 1] - 1 : 0;
+			t_es_stun = es_stun_tier ? es_stun[ es_stun_tier - 1] - 1 : 0;
+			t_flat = flat_tier ? flat[ flat_tier - 1] - 1 : 0
+			hi = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
+
+			t_es = es_tier ? es[ es_tier] : 0;
+			t_es_stun = es_stun_tier ? es_stun[ es_stun_tier] : 0;
+			t_flat = flat_tier ? flat[ flat_tier] : 0;
+			lo = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
 			document.querySelector( "#es-result").innerHTML = Math.round(hi) + " ~ " + Math.round(lo);
 		}
 
