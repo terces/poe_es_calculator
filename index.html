@@ -185,7 +185,6 @@
 			default:
 				break;
 		}
-		dft.style.visibility = "visible";
 		dft.onchange();
 		return ;
 	}
@@ -232,12 +231,13 @@
 	var btn = document.querySelector( "#calc");
 	btn.onclick = run;
 
+	var dft_selector = document.querySelector( '.eq select[name="default_eq"]');
+	dft_selector.onchange = set_default_eq_base;
+
 	var type_selector = document.querySelector( '.eq select[name="btype"]');
 	type_selector.onchange = append_default_eq;
 	type_selector.onchange();
 
-	var dft_selector = document.querySelector( '.eq select[name="default_eq"]');
-	dft_selector.onchange = set_default_eq_base;
 </script>
 </body>
 </html>
