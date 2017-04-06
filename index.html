@@ -9,7 +9,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
 	body {
+		display: flex;
+		min-height: 100vh;
+		flex-direction: column;
 		background-color: #e0e0e0;
+	}
+	main {
+		flex: 1 0 auto;
+	}
+	.page-footer {
+		background-color: #1b5e20;
 	}
 	</style>
 	<title>The Volatile Abyss - ES Calculator</title>
@@ -19,7 +28,6 @@
 <nav class="teal darken-3" role="navigation">
 	<div class="nav-wrapper container">
 		<a id="logo-container" href="#" class="brand-logo">The Volatile Abyss</a>
-		<!--
 		<ul class="right hide-on-med-and-down">
 			<li><a href="http://www.bsql.com.tw" target="_blank">Twitch</a></li>
 		</ul>
@@ -27,87 +35,104 @@
 			<li><a href="http://www.bsql.com.tw" target="_blank">Twitch</a></li>
 		</ul>
 		<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-		-->
 	</div>
 </nav>
 
-<div class="section no-pad-bot" id="index-banner">
-	<div class="container">
-		<h3 class="header center blue-grey-text">Equipment ES calculator</h3>
-		<div class="section eq">
-			<div class="row center">
-				<div class="col s6 l3">
-					<label>Equipment Type</label>
-					<select class="browser-default" name="btype">
-						<option value="helmet">Helmet</option>
-						<option value="body">Body Chest</option>
-						<option value="gloves">Gloves</option>
-						<option value="boots">Boots</option>
-						<option value="shield">Shield</option>
-					</select>
-				</div>
-				<div class="col s6 l3">
-					<label>Base ES</label>
-					<select class="browser-default" name="default_eq" >
-						<option selected>Hubris Circlet</option>
-						<option>Custom</option>
-					</select>
-					<div class="input-field">
-						<input name="bes" type="number" min="0" value="100" oninput="run()" disabled/>
+<main>
+	<div class="section no-pad-bot" id="index-banner">
+		<div class="container">
+			<h3 class="header center blue-grey-text">Equipment ES calculator</h3>
+			<div class="section eq">
+				<div class="row center">
+					<div class="col s6 l3">
+						<label>Equipment Type</label>
+						<select class="browser-default" name="btype">
+							<option value="helmet">Helmet</option>
+							<option value="body">Body Chest</option>
+							<option value="gloves">Gloves</option>
+							<option value="boots">Boots</option>
+							<option value="shield">Shield</option>
+						</select>
 					</div>
-				</div>
-				<div class="col s6 l3">
-					<div class="input-field">
-						<input name="superior" type="number" min="0" max="20" value="20" oninput="this.value = Math.min( 20, Math.max( 0, this.value)); run()"/>
-						<label>Quality</label>
+					<div class="col s6 l3">
+						<label>Base ES</label>
+						<select class="browser-default" name="default_eq" >
+							<option selected>Hubris Circlet</option>
+							<option>Custom</option>
+						</select>
+						<div class="input-field">
+							<input name="bes" type="number" min="0" value="100" oninput="run()" disabled/>
+						</div>
 					</div>
-				</div>
-				<div class="col s6 l3">
-					<label>Result</label>
-					<p id="es-result"></p>
-					<p id="mod-result"></p>
+					<div class="col s6 l3">
+						<div class="input-field">
+							<input name="superior" type="number" min="0" max="20" value="20" oninput="this.value = Math.min( 20, Math.max( 0, this.value)); run()"/>
+							<label>Quality</label>
+						</div>
+					</div>
+					<div class="col s6 l3">
+						<label>Result</label>
+						<p id="es-result"></p>
+						<p id="mod-result"></p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="section mod">
-			<div class="row center">
-				<div class="col s4 l4">
-					<div class="input-field">
-						<input placeholder="Tier?" name="flat-tier" type="number" min="0" oninput="append_tier_info( 'flat')" />
-						<label class="active">Flat ES Tier</label>
-					</div>
-					<form>
-						<p>
+			<div class="section mod">
+				<div class="row center">
+					<div class="col s4 l4">
+						<div class="input-field">
+							<input placeholder="Tier?" name="flat-tier" type="number" min="0" oninput="append_tier_info( 'flat')" />
+							<label class="active">Flat ES Tier</label>
+						</div>
+						<form>
+							<p>
 							<input type="checkbox" class="haku" id="haku-flat" onchange="replace_base_ary(this.checked, this.id)"/>
 							<label for="haku-flat">Craft by Haku</label>
-						</p>
-					</form>
-					<div class="flat tier"></div>
-				</div>
-				<div class="col s4 l4">
-					<div class="input-field">
-						<input placeholder="Tier?" name="es-tier" type="number" min="0" oninput="append_tier_info( 'es')" />
-						<label class="active">ES% Tier</label>
+							</p>
+						</form>
+						<div class="flat tier"></div>
 					</div>
-					<form>
-						<p>
+					<div class="col s4 l4">
+						<div class="input-field">
+							<input placeholder="Tier?" name="es-tier" type="number" min="0" oninput="append_tier_info( 'es')" />
+							<label class="active">ES% Tier</label>
+						</div>
+						<form>
+							<p>
 							<input type="checkbox" class="haku" id="haku-es" onchange="replace_base_ary(this.checked, this.id)"/>
 							<label for="haku-es">Craft by Haku</label>
-						</p>
-					</form>
-					<div class="es tier"></div>
-				</div>
-				<div class="col s4 l4">
-					<div class="input-field">
-						<input placeholder="Tier?" name="es-stun-tier" type="number" min="0" oninput="append_tier_info( 'es-stun')" />
-						<label class="active">ES%/Stun% Tier</label>
+							</p>
+						</form>
+						<div class="es tier"></div>
 					</div>
-					<div class="es-stun tier"></div>
+					<div class="col s4 l4">
+						<div class="input-field">
+							<input placeholder="Tier?" name="es-stun-tier" type="number" min="0" oninput="append_tier_info( 'es-stun')" />
+							<label class="active">ES%/Stun% Tier</label>
+						</div>
+						<div class="es-stun tier"></div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</main>
+
+<footer class="page-footer">
+	<!--
+	<div class="container">
+		<div class="row">
+			<h5 class="white-text right-align">The Volatile Abyss</h5>
+		</div>
+	</div>
+	-->
+	<div class="footer-copyright">
+		<div class="container">
+		Since 2017
+		<a class="grey-text text-lighten-4 right" href="https://github.com/terces/">Contact me</a>
+		</div>
+	</div>
+</footer>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
