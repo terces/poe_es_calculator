@@ -201,7 +201,12 @@
 			lo = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
 			t_sum_lo = t_es + t_es_stun;
 			document.querySelector( "#es-result").innerHTML = "ES Range: " + Math.round(hi).toString() + " ~ " + Math.round(lo).toString();
-			document.querySelector( '#mod-result').innerHTML = flat_tier ? "Flat ES: " + (flat[ flat_tier - 1] - 1).toString() + "~" + (flat[flat_tier]).toString() + "<br />" : "";
+			if( document.querySelector( '.mod input[name="flat-tier"]').max == 2 ) {
+				//haku
+				document.querySelector( '#mod-result').innerHTML = flat_tier ? "Flat ES: " + (haku_flat[ flat_tier - 1] - 1).toString() + "~" + (haku_flat[flat_tier]).toString() + "<br />" : "";
+			}
+			else
+				document.querySelector( '#mod-result').innerHTML = flat_tier ? "Flat ES: " + (flat[ flat_tier - 1] - 1).toString() + "~" + (flat[flat_tier]).toString() + "<br />" : "";
 			document.querySelector( '#mod-result').innerHTML += t_sum_hi > 0 ? "ES%: " + t_sum_hi.toString()  + "%~" + t_sum_lo.toString() +"%" : "";
 		}
 
