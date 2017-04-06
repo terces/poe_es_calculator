@@ -8,7 +8,7 @@
 	<!--RWD-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
-	body { 
+	body {
 		background-color: #e0e0e0;
 	}
 	</style>
@@ -74,6 +74,12 @@
 						<input placeholder="Tier?" name="flat-tier" type="number" min="0" oninput="append_tier_info( 'flat')" />
 						<label class="active">Flat ES Tier</label>
 					</div>
+					<form>
+						<p>
+							<input type="checkbox" class="haku" id="haku-flat" onchange="replace_base_ary(this.checked, this.id)"/>
+							<label for="haku-flat">Craft by Haku</label>
+						</p>
+					</form>
 					<div class="flat tier"></div>
 				</div>
 				<div class="col s4 l4">
@@ -81,6 +87,12 @@
 						<input placeholder="Tier?" name="es-tier" type="number" min="0" oninput="append_tier_info( 'es')" />
 						<label class="active">ES% Tier</label>
 					</div>
+					<form>
+						<p>
+							<input type="checkbox" class="haku" id="haku-es" onchange="replace_base_ary(this.checked, this.id)"/>
+							<label for="haku-es">Craft by Haku</label>
+						</p>
+					</form>
 					<div class="es tier"></div>
 				</div>
 				<div class="col s4 l4">
@@ -131,7 +143,7 @@
 	var shield_es_stun = [ 57, 51, 42, 33, 24, 15, 6];
 	// special: haku
 	var haku_flat = [ 23, 18, 14];
-	var haku_es = [ 69, 55, 53, 44];
+	var haku_es = [ 68, 55, 52, 40];
 
 	function run() {
 		var eq = document.querySelector( '.eq select[name="btype"]').value;
@@ -157,14 +169,34 @@
 		if( noeq == 0) {
 			var t_flat, t_es, t_es_stun;
 			var t_sum_hi = -1, t_sum_lo;
-			t_es = es_tier ? es[ es_tier - 1] - 1 : 0;
+			if( document.querySelector( '.mod input[name="es-tier"]').max == 2 ) {
+				// haku
+				t_es = es_tier ? haku_es[ (es_tier - 1)*2] : 0;
+			}
+			else
+				t_es = es_tier ? es[ es_tier - 1] - 1 : 0;
 			t_es_stun = es_stun_tier ? es_stun[ es_stun_tier - 1] - 1 : 0;
-			t_flat = flat_tier ? flat[ flat_tier - 1] - 1 : 0;
+			if( document.querySelector( '.mod input[name="flat-tier"]').max == 2 ) {
+				// haku
+				t_flat = flat_tier ? haku_flat[ flat_tier - 1] : 0;
+			}
+			else
+				t_flat = flat_tier ? flat[ flat_tier - 1] - 1 : 0;
+
 			hi = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
 			t_sum_hi = t_es + t_es_stun;
 
-			t_es = es_tier ? es[ es_tier] : 0;
+			if( document.querySelector( '.mod input[name="es-tier"]').max == 2 ) {
+				t_es = es_tier ? haku_es[ 1+(es_tier -1)*2] : 0;
+			}
+			else
+				t_es = es_tier ? es[ es_tier] : 0;
 			t_es_stun = es_stun_tier ? es_stun[ es_stun_tier] : 0;
+			if( document.querySelector( '.mod input[name="flat-tier"]').max == 2 ) {
+				// haku
+				t_flat = flat_tier ? haku_flat[ flat_tier] : 0;
+			}
+			else
 			t_flat = flat_tier ? flat[ flat_tier] : 0;
 			lo = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
 			t_sum_lo = t_es + t_es_stun;
@@ -179,6 +211,36 @@
 	function clear_old_result() {
 		document.querySelector( '#es-result').innerHTML = "";
 		document.querySelector( '#mod-result').innerHTML = "";
+		var q = document.querySelectorAll( '.haku');
+		for( var i = 0; i < q.length; ++i)
+			q[i].checked = false;
+	}
+
+	function replace_base_ary( change, type) {
+		var cur_type = type.split('haku-')[1];
+		var tier_ipt = document.querySelector( '.mod input[name="' + cur_type + '-tier"]');
+		var tier_show = document.querySelector( '.mod .' + cur_type + '.tier');
+
+		switch( type) {
+			case 'haku-flat':
+				if( change)
+					tier_ipt.max = 2;
+				else
+					tier_ipt.max = flat.length;
+				break;
+			case 'haku-es':
+				if( change)
+					tier_ipt.max = 2;
+				else
+					tier_ipt.max = es.length;
+				break;
+			default:
+				break;
+		}
+		tier_show.innerHTML = "";
+		tier_ipt.value = "";
+		run();
+		return ;
 	}
 
 	function append_default_eq() {
@@ -200,7 +262,7 @@
 				flat = helmet_flat;
 				es = helmet_es;
 				es_stun = helmet_es_stun;
-				// set max mod 
+				// set max mod
 				flat_ipt.max = helmet_flat.length - 1;
 				es_ipt.max = helmet_es.length - 1;
 				es_stun_ipt.max = helmet_es_stun.length - 1;
@@ -318,10 +380,22 @@
 		etier.value = tier;
 
 		if( tier > 0 && tier <= etier.max ) {
-			if( mod == "flat")
-				cur.innerHTML = "Tier" + tier + ": " + (flat[tier - 1] -1).toString() + "~" + flat[tier].toString();
-			else if( mod == "es")
-				cur.innerHTML = "Tier" + tier + ": " + (es[tier - 1] -1).toString() + "%~" + es[tier].toString() + "%";
+			if( mod == "flat") {
+				if( etier.max == 2) {
+					// haku
+					cur.innerHTML = "Tier" + tier + ": " + (haku_flat[(tier - 1)] - 1).toString() + "~" + haku_flat[tier].toString();
+				}
+				else
+					cur.innerHTML = "Tier" + tier + ": " + (flat[tier - 1] -1).toString() + "~" + flat[tier].toString();
+			}
+			else if( mod == "es") {
+				if( etier.max == 2) {
+					// haku
+					cur.innerHTML = "Tier" + tier + ": " + (haku_es[2*(tier - 1)]).toString() + "%~" + haku_es[1+2*(tier-1)].toString() + "%";
+				}
+				else
+					cur.innerHTML = "Tier" + tier + ": " + (es[tier - 1] -1).toString() + "%~" + es[tier].toString() + "%";
+			}
 			else if( mod == "es-stun")
 				cur.innerHTML = "Tier" + tier + ": " + (es_stun[tier - 1] -1).toString() + "%~" + es_stun[tier].toString() + "%";
 		}
