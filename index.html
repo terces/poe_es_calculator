@@ -29,92 +29,64 @@
 
 <div class="section no-pad-bot" id="index-banner">
 	<div class="container">
-		<h1 class="header center blue-grey-text">Equipment ES calculator</h1>
+		<h3 class="header center blue-grey-text">Equipment ES calculator</h3>
 		<div class="section eq">
 			<div class="row center">
-				<table>
-					<thead>
-						<tr>
-							<th>Equipment Type</th>
-							<th>Base ES</th>
-							<th>Quality</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<div class="input-field">
-									<select class="browser-default" name="btype">
-										<option value="helmet">Helmet</option>
-										<option value="body">Body Chest</option>
-										<option value="gloves">Gloves</option>
-										<option value="boots">Boots</option>
-										<option value="shield">Shield</option>
-									</select>
-								</div>
-							</td>
-							<td>
-								<div class="input-field">
-									<select class="browser-default" name="default_eq" >
-										<option selected>Hubris Circlet</option>
-										<option>Custom</option>
-									</select>
-								</div>
-							</td>
-							<td>
-								<div class="input-field">
-									<input name="superior" type="number" min="0" max="20" value="20" />
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>
-								<div class="input-field">
-									<input name="bes" type="number" min="0" value="100" disabled/>
-								</div>
-							</td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="col s6 l3">
+					<label>Equipment Type</label>
+					<select class="browser-default" name="btype">
+						<option value="helmet">Helmet</option>
+						<option value="body">Body Chest</option>
+						<option value="gloves">Gloves</option>
+						<option value="boots">Boots</option>
+						<option value="shield">Shield</option>
+					</select>
+				</div>
+				<div class="col s6 l3">
+					<label>Base ES</label>
+					<select class="browser-default" name="default_eq" >
+						<option selected>Hubris Circlet</option>
+						<option>Custom</option>
+					</select>
+					<div class="input-field">
+						<input name="bes" type="number" min="0" value="100" oninput="run()" disabled/>
+					</div>
+				</div>
+				<div class="col s6 l3">
+					<div class="input-field">
+						<input name="superior" type="number" min="0" max="20" value="20" oninput="run()"/>
+						<label>Quality</label>
+					</div>
+				</div>
+				<div class="col s6 l3">
+					<label>Result</label>
+					<p id="es-result"></p>
+					<p id="mod-result"></p>
+				</div>
 			</div>
 		</div>
 		<div class="section mod">
 			<div class="row center">
-				<table>
-					<thead>
-						<tr>
-							<th>Flat ES Tier</th>
-							<th>ES% Tier</th>
-							<th>ES%/Stun% Tier</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input name="flat-tier" type="number" min="0" onchange="append_tier_info( 'flat')" /></td>
-							<td><input name="es-tier" type="number" min="0" onchange="append_tier_info( 'es')" /></td>
-							<td><input name="es-stun-tier" type="number" min="0" onchange="append_tier_info( 'es-stun')" /></td>
-						</tr>
-						<tr>
-							<td><div class="flat tier"></td>
-							<td><div class="es tier"></td>
-							<td><div class="es-stun tier"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="section result">
-			<div class="row center">
-				<button id="calc" class="btn waves-light" type="submit">Calculate!</button>
-			</div>
-			<div class="row">
-				<div class="col s12 m6">
-					<div id="es-result"></div>
+				<div class="col s4 l4">
+					<div class="input-field">
+						<input name="flat-tier" type="number" min="0" oninput="append_tier_info( 'flat')" />
+						<label>Flat ES Tier</label>
+					</div>
+					<div class="flat tier"></div>
 				</div>
-				<div class="col s12 m6">
-					<div id="mod-result"></div>
+				<div class="col s4 l4">
+					<div class="input-field">
+						<input name="es-tier" type="number" min="0" oninput="append_tier_info( 'es')" />
+						<label>ES% Tier</label>
+					</div>
+					<div class="es tier"></div>
+				</div>
+				<div class="col s4 l4">
+					<div class="input-field">
+						<input name="es-stun-tier" type="number" min="0" oninput="append_tier_info( 'es-stun')" />
+						<label>ES%/Stun% Tier</label>
+					</div>
+					<div class="es-stun tier"></div>
 				</div>
 			</div>
 		</div>
@@ -334,10 +306,11 @@
 
 	function append_tier_info( mod) {
 		var cur = document.querySelector( '.mod .' + mod + '.tier');
-		var tier = Number( document.querySelector( '.mod input[name="' + mod + '-tier"]').value);
+		var etier = document.querySelector( '.mod input[name="' + mod + '-tier"]');
+		var tier = etier.value;
 		cur.innerHTML = "";
 
-		if( tier > 0) {
+		if( tier > 0 && tier <= etier.max ) {
 			if( mod == "flat")
 				cur.innerHTML = "Tier" + tier + ": " + (flat[tier - 1] -1).toString() + "~" + flat[tier].toString();
 			else if( mod == "es")
@@ -345,10 +318,8 @@
 			else if( mod == "es-stun")
 				cur.innerHTML = "Tier" + tier + ": " + (es_stun[tier - 1] -1).toString() + "%~" + es_stun[tier].toString() + "%";
 		}
+		run();
 	}
-
-	var btn = document.querySelector( "#calc");
-	btn.onclick = run;
 
 	var dft_selector = document.querySelector( '.eq select[name="default_eq"]');
 	dft_selector.onchange = set_default_eq_base;
@@ -357,6 +328,7 @@
 	type_selector.onchange = append_default_eq;
 	type_selector.onchange();
 
+	run();
 </script>
 </body>
 </html>
