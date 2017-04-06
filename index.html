@@ -1,56 +1,133 @@
 <!DOCTYPE html>
 <html lang="zh-tw">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body { 
-	background-color: grey;
-}
-</style>
+	<!--Import Google Icon Font-->
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+	<!--RWD-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	body { 
+		background-color: #e0e0e0;
+	}
+	</style>
 </head>
 <body>
 
-<h1>Path of Exile Equipment Energy Shield calculator</h1>
+<nav class="teal darken-3" role="navigation">
+	<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">The Volatile Abyss</a>
+		<ul class="right hide-on-med-and-down">
+			<li><a href="http://www.bsql.com.tw" target="_blank">Twitch</a></li>
+		</ul>
+		<ul id="nav-mobile" class="side-nav">
+			<li><a href="http://www.bsql.com.tw" target="_blank">Twitch</a></li>
+		</ul>
+		<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+	</div>
+</nav>
 
-<div class="eq">
-	<div id="type">
-		<label>Equiment Type</label>
-		<select name="btype">
-			<option value="helmet">Helmet</option>
-			<option value="body">Body Chest</option>
-			<option value="gloves">Gloves</option>
-			<option value="boots">Boots</option>
-			<option value="shield">Shield</option>
-		</select>
+<div class="section no-pad-bot" id="index-banner">
+	<div class="container">
+		<h1 class="header center blue-grey-text">Equipment ES calculator</h1>
+		<div class="section eq">
+			<div class="row center">
+				<table>
+					<thead>
+						<tr>
+							<th>Equipment Type</th>
+							<th>Base ES</th>
+							<th>Quality</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="input-field">
+									<select class="browser-default" name="btype">
+										<option value="helmet">Helmet</option>
+										<option value="body">Body Chest</option>
+										<option value="gloves">Gloves</option>
+										<option value="boots">Boots</option>
+										<option value="shield">Shield</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-field">
+									<select class="browser-default" name="default_eq" >
+										<option selected>Hubris Circlet</option>
+										<option>Custom</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-field">
+									<input name="superior" type="number" min="0" max="20" value="20" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<div class="input-field">
+									<input name="bes" type="number" min="0" value="100" disabled/>
+								</div>
+							</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="section mod">
+			<div class="row center">
+				<table>
+					<thead>
+						<tr>
+							<th>Flat ES Tier</th>
+							<th>ES% Tier</th>
+							<th>ES%/Stun% Tier</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input name="flat-tier" type="number" min="0" onchange="append_tier_info( 'flat')" /></td>
+							<td><input name="es-tier" type="number" min="0" onchange="append_tier_info( 'es')" /></td>
+							<td><input name="es-stun-tier" type="number" min="0" onchange="append_tier_info( 'es-stun')" /></td>
+						</tr>
+						<tr>
+							<td><div class="flat tier"></td>
+							<td><div class="es tier"></td>
+							<td><div class="es-stun tier"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="section result">
+			<div class="row center">
+				<button id="calc" class="btn waves-light" type="submit">Calculate!</button>
+			</div>
+			<div class="row">
+				<div class="col s12 m6">
+					<div id="es-result"></div>
+				</div>
+				<div class="col s12 m6">
+					<div id="mod-result"></div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div id="base">
-		<label>Base ES</label>
-		<input name="bes" type="number" min="0" value="100" disabled/>
-		<select name="default_eq" >
-			<option selected>Hubris Circlet</option>
-			<option>Custom</option>
-		</select><br />
-		Quality: <input name="superior" type="number" min="0" max="20" value="20" />
-	</div>
-</div>
-<div class="mod">
-	<div id="flat">
-		<label>Flat ES Tier</label><input name="flat-tier" type="number" min="0" onchange="append_tier_info( 'flat')" /><div class="tier"></div><br />
-	</div>
-	<div id="es">
-		<label>ES% Tier</label><input name="es-tier" type="number" min="0" onchange="append_tier_info( 'es')" /><div class="tier"></div><br />
-	</div>
-	<div id="es-stun">
-		<label>ES%/Stun% Tier<label><input name="es-stun-tier" type="number" min="0" onchange="append_tier_info( 'es-stun')" /><div class="tier"></div><br />
-	</div>
-</div>
-<div class="result">
-	<button id="calc">Calculate!</button><br />
-	<label>ES Range</label>
-	<div id="es-result"></div>
-	<div id="mod-result"></div>
 </div>
 
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+<script>
+	// for material compoment
+	$(document).ready( function() {
+	});
+</script>
 <script>
 	// ES range
 	// global hi, lo
@@ -116,9 +193,9 @@ body {
 			t_flat = flat_tier ? flat[ flat_tier] : 0;
 			lo = ( 1 + ( superior + t_es + t_es_stun )/100 ) * (bes + t_flat);
 			t_sum_lo = t_es + t_es_stun;
-			document.querySelector( "#es-result").innerHTML = Math.round(hi).toString() + " ~ " + Math.round(lo).toString();
+			document.querySelector( "#es-result").innerHTML = "ES Range: " + Math.round(hi).toString() + " ~ " + Math.round(lo).toString();
 			document.querySelector( '#mod-result').innerHTML = flat_tier ? "Flat ES: " + (flat[ flat_tier - 1] - 1).toString() + "~" + (flat[flat_tier]).toString() + "<br />" : "";
-			document.querySelector( '#mod-result').innerHTML += t_sum_hi > 0 ? "ES%: " + t_sum_hi.toString()  + "~" + t_sum_lo.toString() : "";
+			document.querySelector( '#mod-result').innerHTML += t_sum_hi > 0 ? "ES%: " + t_sum_hi.toString()  + "%~" + t_sum_lo.toString() +"%" : "";
 		}
 
 		return false;
@@ -256,8 +333,8 @@ body {
 	}
 
 	function append_tier_info( mod) {
-		var cur = document.querySelector( '.mod #' + mod + ' .tier');
-		var tier = Number( document.querySelector( '.mod #' + mod + ' input').value);
+		var cur = document.querySelector( '.mod .' + mod + '.tier');
+		var tier = Number( document.querySelector( '.mod input[name="' + mod + '-tier"]').value);
 		cur.innerHTML = "";
 
 		if( tier > 0) {
