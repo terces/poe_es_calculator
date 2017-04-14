@@ -256,6 +256,8 @@
 		var q = document.querySelectorAll( '.haku');
 		for( var i = 0; i < q.length; ++i)
 			q[i].checked = false;
+		replace_base_ary( false, 'haku-flat');
+		replace_base_ary( false, 'haku-es');
 		q = document.querySelectorAll( '.mod select[name$="-tier"]');
 		for( var i = 0; i < q.length; ++i)
 			q[i].selectedIndex = 0;
@@ -323,10 +325,6 @@
 		var eq = document.querySelector( '.eq select[name="btype"]').value;
 		var dft = document.querySelector( '.eq select[name="default_eq"]');
 		var custom = document.querySelector( '.eq input[name="bes"]');
-
-		var flat_ipt = document.querySelector( '.mod input[name="flat-tier"]');
-		var es_ipt = document.querySelector( '.mod input[name="es-tier"]');
-		var es_stun_ipt = document.querySelector( '.mod input[name="es-stun-tier"]');
 
 		custom.disabled = true;
 		clear_old_result();
@@ -416,6 +414,7 @@
 	function create_tier_select( type) {
 		// tiers
 		var sel_flat = document.querySelector( '.mod select[name=flat-tier]');
+		var sel_es = document.querySelector( '.mod select[name=es-tier]');
 		var eq = document.querySelector( '.eq select[name="btype"]').value;
 		var t1;
 		sel_flat.innerHTML = "";
